@@ -1,0 +1,29 @@
+#post_text {
+    margin-top: 1.5vh;
+    line-height: 3.5vh;
+    margin-bottom: -2.5vh;
+}
+
+.article_icons {
+    line-height: inherit; 
+    padding-right: 0.5rem;
+    padding-left: 0.5rem
+}
+
+#article_icons_container{
+    display: flex;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.like_btn_user_inactive {
+    line-height: inherit;
+    vertical-align: middle;
+}
+
+.like {
+    user-select: none;
+    vertical-align: middle;
+    padding: 0 16px;
+    font-size: 16px;
+}

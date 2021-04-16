@@ -1,0 +1,147 @@
+<div class="col s9" >
+    <div class="card">
+        <div class="card-content">
+            <div class="section">
+                <h4>{{ post.title }}</h4>
+                <div class="divider"></div>
+                <p id="article_icons_container"><i class="material-icons tiny article_icons">access_time</i> {{ post.date }} |<i class="material-icons tiny article_icons">contacts</i> {{ post.author}} |  {{ post.views }} <i class="material-icons tiny article_icons">remove_red_eye</i></p>
+                <div class="divider"></div>
+                <div id="post_text" [innerHTML]="post.text | noSanitize" style="word-wrap: break-word"></div>
+            </div>
+            <a *ngFor="let tag of post.tags" (click)="clickTag(tag)" style="cursor: pointer; margin-right: .5vw; user-select: none">#{{tag}}</a>
+        </div>
+        <div class="card-action">
+            <a class="waves-effect waves-light btn white red-text" id="likeBtn" (click)="like()" style="margin-right: 1vh;">
+                <div *ngIf="post.hide_likes && !user.is_staff">
+                    <i class="material-icons">{{ liked }}</i>
+                </div>
+                <div *ngIf="!post.hide_likes || user.is_staff">
+                    <i class="material-icons left">{{ liked }}</i>
+                    <div style="display: inline; font-size: 20px; margin-left: -8px;">{{ likeCount }}</div>
+                </div>
+            </a>
+            <a *ngIf="!post.block_comments" class="waves-effect waves-light btn white blue-text" id="commentBtn" (click)="openCloseComments()" style="margin-right: 1vh;"><i class="material-icons left">chat</i><div style="display: inline; font-size: 20px; margin-left: -8px;">{{ commentList.length }}</div></a>
+            <a class="waves-effect waves-light btn blue modal-trigger" href="#modal1" (click)="lists()" ><i class="material-icons">add_to_photos</i></a> 
+            <!--<a class="btn blue waves-effect waves-light" style="margin-left: 1vh"><i class="material-icons">share</i></a> -->
+            <div class="right"*ngIf="user.is_staff">
+                <a class="btn" href="/articol/{{ id }}/edit" style="margin-right: 1vh;"><i class="material-icons">edit</i></a>
+                <button class="btn red" routerLink="" (click)="deletePost()"><i class="material-icons">delete</i></button>
+            </div>
+            
+        </div>
+    </div>
+    <div id="modal1" class="modal" style="width: max-content; min-width: 20vw;">
+        <div class="modal-content">
+            <h5>Adaugă în</h5>
+            <div class="divider"></div>
+            <ul>
+                <li *ngFor="let list of Lists" style="margin-bottom: 5%;">
+                    <label>
+                        <input type="checkbox" class="filled-in" (change)="addRemoveItemtoList(list)" [checked]="list.added"/>
+                        <span>{{ list.name }}</span>
+                    </label>
+                    <i class="material-icons right" *ngIf="list.access">public</i>
+                    <i class="material-icons right" *ngIf="!list.access">lock</i>
+                </li>
+                <li *ngIf="addList">
+                    <div class="divider"></div>
+                    <div class="input-field">
+                        <input placeholder="Numele listei" [(ngModel)]="newList.name" id="first_name" type="text" class="validate">
+                    </div>
+                    <label>
+                        <input type="checkbox" class="filled-in blue" [(ngModel)]="newList.access"/>
+                        <span>Public</span>
+                    </label>
+                    <a class="waves-effect btn right" (click)="addNewList()">Salvează</a>
+                </li>
+            </ul>
+        </div>
+        <div class="modal-footer" *ngIf="!addList">
+            <div class="divider"></div>
+            <a class="waves-effect btn-flat"  (click)="addList = true">Creează o listă nouă</a>
+        </div>
+    </div>
+    <div class="collection with-header z-depth-1" *ngIf="post.survey_active">
+        <div class="collection-header"><h5>{{post.surveys_question}}</h5></div>
+        <a id="{{question.value[1]}}" (click)="clickVariant(question.value[1])" style="cursor: pointer;" class="variant collection-item light-blue-text text-darken-2" *ngFor="let question of survey.variants | keyvalue">
+            <span data-badge-caption="voturi" class="new badge light-blue darken-2" *ngIf="survey.user_voted && user.is_authenticated">{{question.value[0]}}</span>
+            {{question.key}}
+        </a>
+        <div class="collection-item ">
+            <button class="btn blue" (click)="vote()" *ngIf="!survey.user_voted">Votează</button>
+            <button class="btn blue" disabled *ngIf="survey.user_voted">Ai votat deja</button>
+        </div>
+    </div>
+    <div>
+        <h4>Comentarii</h4>
+        <div class="card" *ngIf="writeComment">
+            <div class="card-content">
+                <div class="row">
+                    <h5 [ngClass]="{ 'blue-text' : user.is_authenticated, 'yellow-text text-darken-2' : user.is_staff }" style="margin-left: 1%;" *ngIf="user.is_authenticated">{{ user.username }}</h5>
+                    <div class="input-field col s10" *ngIf="!user.is_authenticated">
+                        <input type="text" required id="commentUsername" [(ngModel)]="username">
+                        <label class="active" for="commentUsername">Nume de utilizator</label>
+                    </div>
+                    <div class="input-field col s10">
+                        <input type="text" id="commentText" required [(ngModel)]="text">
+                        <label class="active" for="commentText" >Comentariul</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-action">
+                <button (click)="addComment()" class="btn-flat btn waves-effect waves-light yellow-text text-darken-4 white">Trimite <i class="material-icons right">send</i></button>
+            </div>
+        </div>
+        <div *ngFor="let comment of commentList; let i = index">
+            <div class="card horizontal hoverable">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <a class="black-text right" style="user-select: none; cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i class="material-icons">more_vert</i></a>
+                        <mat-menu #menu="matMenu">
+                            <a mat-menu-item (click)="answer(); comment.answer = true; subComment.text = comment.author + ', '">Răspunde</a>
+                            <a mat-menu-item *ngIf="!user.is_staff">Raportează</a>
+                            <a mat-menu-item (click)="removeComment(comment.pk)" *ngIf="user.is_staff">Șterge</a>
+                        </mat-menu>
+                        <h5 [ngClass]="{ 'blue-text' : comment.auth, 'yellow-text text-darken-2' : comment.admin }">{{ comment.author }}</h5>
+                        <p>{{ comment.text  }} </p>
+                        <p class="right">{{ comment.date }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin-left: 5%" *ngIf="comment.answer">
+                <div class="card-content">
+                    <a class="right black-text" style="cursor: pointer; user-select: none" (click)="comment.answer = false"><i class="material-icons">close</i></a>
+                    <div class="row">    
+                        <h5 style="margin-left: 1%;"[ngClass]="{ 'blue-text' : user.is_authenticated, 'yellow-text text-darken-2' : user.is_staff }" *ngIf="user.is_authenticated">{{ user.username }}</h5>
+                        <div class="input-field col s10" *ngIf="!user.is_authenticated">
+                            <input type="text" required id="commentUsername" [(ngModel)]="subComment.author">
+                            <label class="active" for="commentUsername">Nume de utilizator</label>
+                        </div>
+                        <div class="input-field col s10">
+                            <input type="text" id="commentText" required value="{{ user.username }}, " [(ngModel)]="subComment.text">
+                            <label class="active" for="commentText" >Comentariul</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <button (click)="addSubComment( comment.pk)" class="btn-flat btn waves-effect waves-light yellow-text text-darken-4 white">Trimite <i class="material-icons right">send</i></button>
+                </div>
+            </div> 
+            <div class="card horizontal hoverable" style="margin-left: 5%" *ngFor="let subComment of comment.subComments">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <a class="black-text right" style="user-select: none; cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i class="material-icons">more_vert</i></a>
+                        <mat-menu #menu="matMenu">
+                            <a mat-menu-item *ngIf="!user.is_staff">Raportează</a>
+                            <a mat-menu-item (click)="deleteSubComment(subComment.pk)" *ngIf="user.is_staff">Șterge</a>
+                        </mat-menu>
+                        <h5 [ngClass]="{ 'blue-text' : comment.auth, 'yellow-text text-darken-2' : comment.admin }">{{ subComment.author }}</h5>
+                        <p>{{ subComment.text  }} </p>
+                        <p class="right">{{ subComment.date }}</p>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <p *ngIf="commentList.length == 0 && !writeComment">La moment nu există niciun comentariu</p>
+    </div>
+</div>

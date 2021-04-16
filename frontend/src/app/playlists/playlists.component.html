@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col s9">
+        <div class="col s12" *ngFor="let list of Lists.lists; let i = index">
+            <h4 style="cursor: pointer; outline: none;" routerLink="/lista/{{list.pk}}">{{list.name}} <div class="grey-text text-darken-1 right" *ngIf="!list.hidden">{{list.length}}</div></h4>
+            <div class="row">
+                <div class="col s3" *ngFor="let post of list.posts">
+                    <div class="card hoverable">
+                        <div routerLink="/articol/{{post.url}}" class="card-image" style="cursor: pointer;" >
+                            <img src="{{post.cover}}" class="article_image">
+                            <span class="card-title">{{post.title}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="card">
+            <div class="card-image">
+                <img src="https://i.pinimg.com/originals/d3/7f/8b/d37f8be6e4f64be5df39d2b82b8b2e9d.png">
+            </div>
+            <div class="card-content">
+                <h6>Liste <div class="right">{{Lists.lists.length}}</div></h6>
+                <div class="divider"></div>
+                <h6>Aprecieri <div class="right">{{Lists.likes}}</div></h6>
+                <div class="divider"></div>
+                <h6>Vizionări <div class="right">{{Lists.views}}</div></h6>
+            </div>
+        </div>
+    </div>
+</div>

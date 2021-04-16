@@ -1,0 +1,58 @@
+.article_image {
+    object-fit: cover; 
+    overflow: hidden;
+    width: 10rem!important; 
+    height: 100%!important;
+}
+
+.icon {
+    line-height: inherit;
+    padding-right: 0.5rem;
+    padding-left: 0.2rem;
+}
+
+.icons_container {
+    display: flex;
+}
+
+.big-image {
+    height: 100%; 
+    width: 100%;
+    object-fit: cover; 
+    overflow: hidden;
+    animation-name: show;
+    animation-duration: 0.3s;
+}
+
+.big-image-title {
+    background-color: rgba(1, 87, 155, 0.5); 
+    margin:2%; 
+    max-width: 80%;
+}
+
+.big-image-switcher {
+    user-select: none;
+    color:#fff;
+    font-size: 900%; 
+    cursor: pointer; 
+    position: absolute; 
+    top: 35%;
+    mix-blend-mode: exclusion;
+}
+
+.top-image {
+    object-fit: cover; 
+    overflow: hidden;
+    height: 100%; 
+    width: 5vw!important;
+}
+
+.top-article-header {
+    height: 7vh; 
+    margin-bottom: 2.9vh;
+}
+
+@keyframes show {
+    from {opacity: 50%;}
+    to {opacity: 100%;}
+  }

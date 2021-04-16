@@ -1,0 +1,93 @@
+<div class="row">
+    <div class="col s4">
+        <div class="card">
+            <div class="card-image">
+                <img src="https://wallpaperaccess.com/full/672238.jpg">
+                <span class="card-title">{{list.length}} articole</span>
+            </div>
+            <div class="card-content">
+                <i (click)="deleteList()" class="material-icons right"  *ngIf="list.own && list.removable">delete</i>
+                <i class="material-icons right" style="cursor: pointer;" (click)="copyUrl()">content_copy</i>
+                <i (click)="shuffle()" style="cursor: pointer;" class="material-icons right">shuffle</i>
+                <p class="left">{{list.author}}</p>
+                <h4 (input)="changeName(name.innerText)" #name contenteditable style="outline: none;">{{list.name}}</h4>
+                <div *ngIf="list.own">
+                    <i title="Listele publice pot fi accesate de alți utilizatori după link" class="material-icons left">error_outline</i>
+                    <div class="switch" >
+                        <label>
+                        Privat
+                        <input (change)="changeAccess()" type="checkbox" [(ngModel)]="list.access">
+                        <span class="lever"></span>
+                        Public
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s8">
+        <a routerLink="articol/{{ post.url }}" class="black-text" *ngFor="let post of list.posts">
+            <div class="card horizontal hoverable" >
+                <div class="card-image valign-wrapper">
+                    <img src="{{post.cover}}" class="image article_image">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p class="right">{{post.createdDate}}</p>
+                        <div class="section">
+                            <h4><div *ngIf="post.draft" style="color: #009688; display: inline">Privat: </div>{{ post.title }}</h4>
+                            <p style="font-size:1.2rem">{{ post.text | formatPreview: 40 }}</p>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="section">
+                            <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} |<i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}} |<i class="material-icons tiny black-text icon">favorite</i> {{post.likeCount}}</p>
+                        </div>     
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div class="col s12 center" *ngIf="loading">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                    <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                    </div>
+                </div>
+        
+                <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                    <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                    </div>
+                </div>
+        
+                <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                    <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                    </div>
+                </div>
+        
+                <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                    <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

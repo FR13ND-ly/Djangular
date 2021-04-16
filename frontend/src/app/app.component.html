@@ -1,0 +1,47 @@
+<header>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper white">
+                <a routerLink="" class="brand-logo center light-blue-text text-darken-2">Est Curier</a>
+                <ul class="left">
+                    <li><a data-target="slide-out" style="display: block;" class="sidenav-trigger"><i class="material-icons black-text">menu</i></a></li>
+                </ul>
+                <ul class="right">
+                    <li><a data-target="slide-out1" style="display: block;" class="sidenav-trigger"><i class="material-icons black-text">search</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<main style="flex: 1 0">
+    <app-side-nav></app-side-nav>
+    <app-side-search></app-side-search>
+    <div class="row">
+        <router-outlet></router-outlet>
+    </div>
+</main> 
+<footer class="page-footer grey lighten-2" >
+    <div class="container ">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="black-text">Est Curier</h5>
+                <p class="black-text">Ziarul cu care stai de vorbă și în care poți avea încredere</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="black-text">Rețele Sociale</h5>
+                <ul>
+                    <li><a class="black-text" href="https://www.facebook.com/Est-Curier-Criuleni-1498073250508795/">Facebook</a></li>
+                    <li><a class="black-text" href="https://www.youtube.com/channel/UCflgGBMYMLcveK-xoX_RipA">YouTube</a></li>
+                    <li><a class="black-text" href="https://www.instagram.com/estcurier/">Instagram</a></li>
+                    <li class="hide-on-med-and-up black-text">Support:estcuriercriuleni@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container black-text">
+            © 2020 Est Curier. All Rights Reserved.
+            <div id="estcurier_support" class="hide-on-small-only">Support:estcuriercriuleni@gmail.com</div>
+        </div>
+    </div>
+</footer>

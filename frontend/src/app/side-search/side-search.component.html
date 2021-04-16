@@ -1,0 +1,31 @@
+<div id="slide-out1" name="sidesearch" class="sidenav grey lighten-3" style="width: 100%" >
+    <i class="material-icons right closeBtn" (click)="close()">close</i>
+    <div class="center">
+        <input class="search {{tag}}" id="search" placeholder="Caută" type="text" (input)="search()" [(ngModel)]="text" spellcheck="false">
+        <button class="hide" (click)="secondSearch()" id="secondSearch"></button>
+        <h4 *ngIf="resultList.length == 0 && text != ''">Niciun rezultat</h4>
+    </div>
+    <div class="row">
+        <div class="col s9">
+            <a (click)="clickPost(post.pk)" style="cursor: pointer;" class="black-text" *ngFor="let post of resultList">
+                <div class="card horizontal hoverable" >
+                    <div class="card-image valign-wrapper">
+                        <img src="{{post.cover}}" class="image article_image">
+                    </div>
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <div class="section">
+                                <h4>{{ post.title }}</h4>
+                                <p style="font-size:1.2rem">{{ post.text | formatPreview: 15 }}</p>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section">
+                                <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} |<i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}} |<i class="material-icons tiny black-text icon">favorite</i> {{post.likeCount}}</p>
+                            </div>     
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

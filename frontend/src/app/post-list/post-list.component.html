@@ -1,0 +1,69 @@
+<div class="col s12">
+    <div class="col s9">
+        <div *ngFor="let post of postList; let i = index">
+            <div class="card hoverable" *ngIf="bigImage == i" style="height: 89vh">
+                <div class="card-image" (mouseover)="showArrows = true" (mouseleave)="showArrows = false"style="width: 100%; height: 76vh;">
+                    <a routerLink="articol/{{post.url}}">
+                        <img src="{{post.cover}}" class="big-image">
+                    </a>
+                    <span class="card-title z-depth-1 big-image-title">{{ post.title }}</span>
+                    <div *ngIf="showArrows && postList.length > 1">
+                        <span class="big-image-switcher" style="right: 2%"><i class="material-icons large" (click)="bigImage = bigImage == postList.length - 1 ? 0 :  bigImage = bigImage + 1; setTimer()">arrow_forward</i></span>
+                        <span class="big-image-switcher" style="left: 2%"><i class="material-icons large" (click)="bigImage = bigImage == 0 ? postList.length - 1 : bigImage = bigImage - 1; setTimer()">arrow_back</i></span>
+                    </div>
+                </div>
+                <a routerLink="articol/{{post.url}}">
+                    <div class="card-content s12 valign-wrapper">
+                        <p class="black-text">{{ post.text | formatPreview :30 }}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="card light-blue darken-2 valign-wrapper top-article-header">
+            <div class="card-content white-text">
+                <p>Cele mai populare</p>
+            </div>
+        </div>
+        <a href="articol/{{post.url}}" *ngFor="let post of topPostList">
+            <div class="card horizontal hoverable top_article" style="max-height: 25vh;">
+                <div class="card-image" style="height: 25vh">
+                    <img class="top-image" src="{{ post.cover }}">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content valign-wrapper">
+                        <p class="black-text">{{ post.title }}</p>
+                    </div>                                
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="col s12">
+    <app-sep-posts></app-sep-posts>
+    <div class="col s9">
+        <a routerLink="articol/{{ post.url }}" class="black-text" *ngFor="let post of postList">
+            <div class="card horizontal hoverable" >
+                <div class="card-image valign-wrapper">
+                    <img src="{{post.cover}}" class="image article_image">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <div class="section">
+                            <h4><div *ngIf="post.draft" style="color: #009688; display: inline">Privat: </div>{{ post.title }}</h4>
+                            <p style="font-size:1.2rem">{{ post.text | formatPreview: 40 }}</p>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="section">
+                            <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} |<i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}} |<i class="material-icons tiny black-text icon">favorite</i> {{post.likeCount}}</p>
+                        </div>     
+                    </div>
+                </div>
+            </div>
+        </a>
+        <ul class="pagination center">
+            <li *ngFor="let page of paginator" [className]="page == pageId ? 'waves-effect active blue darken-3' : 'waves-effect'"><a (click)="getPostList(page)">{{ page }}</a></li>
+        </ul> 
+    </div>
+</div>

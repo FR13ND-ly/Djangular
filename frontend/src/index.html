@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <title>Est-Curier</title>
+  <base href="/">
+  <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ziarul cu care stai de vorbă și în care poți avea încredere!">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Est-Curier">
+  <meta property="og:description" content="Ziarul cu care stai de vorbă și în care poți avea încredere!">
+  <meta property="og:url" content="http://estcurier.md">
+  <meta property="og:site_name" content="Est-Curier">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="grey lighten-3" style="display: flex; min-height: 100vh; flex-direction: column;">
+  <app-root></app-root>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var options = {
+      inDuration : 550,
+      outDuration : 300,
+      edge : "right"
+    }
+    var elems = document.getElementsByName('sidesearch');
+    var instances = M.Sidenav.init(elems, options);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.chips');
+    options = {placeholder : "Adaugă o etichetă"}
+    var instances = M.Chips.init(elems, options);
+  });
+</script>
+</html>

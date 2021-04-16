@@ -1,0 +1,37 @@
+.closeBtn {
+    top: 5vh;
+    right: 5vh;
+    font-size: 58px;
+    cursor: pointer;
+    user-select: none;
+    position: fixed;
+}
+
+.search {
+    width: 35vw!important;
+    font-size: 36px!important;
+    margin-top: 20vh!important;
+    margin-bottom: 5vh!important;
+    height: 9vh!important;
+}
+
+.article_image {
+    object-fit: cover; 
+    overflow: hidden;
+    width: 10rem!important; 
+    height: 100%!important;
+}
+
+.icon {
+    line-height: inherit;
+    padding-right: 0.5rem;
+    padding-left: 0.2rem;
+}
+
+.icons_container {
+    display: flex;
+}
+
+.card {
+    margin-left: 25vw!important
+}
