@@ -27,5 +27,7 @@ urlpatterns = [
     path('surveyApi/', views.surveyApi),
     path('fileApi/<int:lk>/', views.fileAPI),
     path('fileApi/', views.fileAPI),
+    path('statistic/', views.statistic),
+    path('addons/', views.addonsAPI),
     url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
 ]

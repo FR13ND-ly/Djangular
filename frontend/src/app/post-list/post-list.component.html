@@ -26,7 +26,7 @@
                 <p>Cele mai populare</p>
             </div>
         </div>
-        <a href="articol/{{post.url}}" *ngFor="let post of topPostList">
+        <a href="/articol/{{post.url}}" *ngFor="let post of topPostList">
             <div class="card horizontal hoverable top_article" style="max-height: 25vh;">
                 <div class="card-image" style="height: 25vh">
                     <img class="top-image" src="{{ post.cover }}">
@@ -41,9 +41,9 @@
     </div>
 </div>
 <div class="col s12">
-    <app-sep-posts></app-sep-posts>
+  <!--  <app-sep-posts></app-sep-posts> -->
     <div class="col s9">
-        <a routerLink="articol/{{ post.url }}" class="black-text" *ngFor="let post of postList">
+        <a href="/articol/{{ post.url }}" class="black-text" *ngFor="let post of postList">
             <div class="card horizontal hoverable" >
                 <div class="card-image valign-wrapper">
                     <img src="{{post.cover}}" class="image article_image">
@@ -63,7 +63,7 @@
             </div>
         </a>
         <ul class="pagination center">
-            <li *ngFor="let page of paginator" [className]="page == pageId ? 'waves-effect active blue darken-3' : 'waves-effect'"><a (click)="getPostList(page)">{{ page }}</a></li>
+            <li *ngFor="let page of paginator" style="outline: none;" [className]="page == pageId ? 'waves-effect active blue darken-3' : 'waves-effect'" routerLink="/pagina/{{page}}"><a (click)="getPostList(page)">{{ page }}</a></li>
         </ul> 
     </div>
 </div>

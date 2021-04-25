@@ -28,7 +28,7 @@ export class HeroService {
   }
 
   editPost(data){
-    return this.http.put(this.APIUrl + 'post/', data).subscribe()
+    return this.http.put(this.APIUrl + 'post/', data)
   }
 
   sepPosts(){
@@ -89,5 +89,12 @@ export class HeroService {
   }
   addRemoveItemtoList(data){
     return this.http.put(this.APIUrl + "list/", data)
+  }
+  statistic(){
+    return this.http.get(this.APIUrl + "statistic/")
+  }
+
+  addons(data){
+    return this.http.post(this.APIUrl + "addons/", data)
   }
 }

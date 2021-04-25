@@ -11,6 +11,16 @@
     margin-top: -3vh
 }
 
+.listimage {
+    cursor: pointer;
+    object-fit: cover; 
+    overflow: hidden;
+    height: 150px;
+    width: 100%;
+    margin-bottom: 3vh;
+}
+
+
 #post_code, #post_text {
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -31,13 +41,19 @@ i {
     margin-bottom: 3vh;
 }
 
-.selected_variant {
+.selected {
     animation-name: select_image;
     animation-duration: 0.15s;
+    padding: 0px;
     border: 10px solid #26a69a;
 }
 
 @keyframes select_image {
     0% {border: 0}
     100% {border: 10px solid #26a69a}
+}
+
+.modal {
+    background-color: transparent;
+    width: 85vw;
 }

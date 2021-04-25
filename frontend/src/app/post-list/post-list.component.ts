@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from 'src/app/hero.service'
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { UserService } from 'src/app/user.service'
 
 @Component({
@@ -30,8 +30,8 @@ export class PostListComponent implements OnInit {
     }
     let p = new Promise((resolve, reject) => {
       this.userService.getUser().subscribe(res => {
-          this.userToken =  res['token']
-          resolve(this.userToken)
+        this.userToken =  res['token']
+        resolve(this.userToken)
       })
     })
     p.then((data)=> {

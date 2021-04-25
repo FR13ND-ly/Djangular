@@ -1,83 +1,192 @@
-<div class="col s4">
+<div class="col s6">
     <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('social')">
         <div class="card-content white-text">
             <p>Social<i class="material-icons right">people</i></p>
         </div>
     </div>
-    <a routerLink="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['social']">
-        <div class="card post hoverable">
-            <div class="card-image categoric-image-container">
-                <img src="{{post.cover}}" class="categoric-image">
-            </div>
-            <div class="card-stacked">
-                <div class="card-content">
-                    <div class="section">
-                        <p style="font-size: 1.9rem">{{ post.title  }}</p>
+    <div class="row">
+        <div class="col s4">
+            <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['social'].slice(0, 2)">
+                <div class="card post hoverable">
+                    <div class="card-image">
+                        <img src="{{post.cover}}" style="height: 25vh; object-fit: cover; overflow: hidden; ">
                     </div>
-                    <div style="position: absolute; bottom: 5%; width: 90%">
-                        <div class="divider"></div>
-                        <div class="section">
-                            <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} | <i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}}</p>
+                    <div class="card-content">
+                        <p style="font-size: 1.2rem;">{{ post.title }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col s8">
+            <div class="row">
+                <div class="col s12">
+                    <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['social'].slice(2, 3)">
+                        <div class="card post hoverable" >
+                            <div class="card-image" >
+                                <img src="{{post.cover}}" style="height: 45.6vh; object-fit: cover; overflow: hidden;">
+                                <span class="card-title" style="background-color: rgba(1, 87, 155, 0.5); margin:2%; max-width: 80%; padding: 1 rem;">{{ post.title }}</span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+                <div class="col s6"  *ngFor="let post of lists['social'].slice(3, 5)">
+                    <a href="articol/{{post.url}}" class="black-text">
+                        <div class="card post hoverable">
+                            <div class="card-image" style="height: 24vh; object-fit: cover; overflow: hidden; ">
+                                <img src="{{post.cover}}" class="categoric-image">
+                                <span class="card-title" style="background-color: rgba(1, 87, 155, 0.5); margin:2%; max-width: 80%; font-size: 1.2rem; padding: 1.5rem;">{{ post.title }}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
-    </a>
+    </div>
 </div>
-<div class="col s4">
+<div class="col s6">
     <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('politic')">
         <div class="card-content white-text">
             <p>Politic<i class="material-icons right">gavel</i></p>
         </div>
     </div>
-    <a routerLink="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['politic']">
-        <div class="card post hoverable">
-            <div class="card-image valign-wrapper categoric-image-container">
-                <img src="{{post.cover}}" class="categoric-image">
-            </div>
-            <div class="card-stacked">
-                <div class="card-content">
-                    <div class="section">
-                        <p style="font-size: 1.9rem;">{{ post.title  }}</p>
-                    </div>
-                    <div style="position: absolute; bottom: 5%; width: 90%">
-                        <div class="divider"></div>
-                        <div class="section">
-                            <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} | <i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}}</p>
+    <div class="row">
+        <div class="col s8">
+            <div class="row">
+                <div class="col s12">
+                    <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['politic'].slice(2, 3)">
+                        <div class="card post hoverable" >
+                            <div class="card-image" >
+                                <img src="{{post.cover}}" style="height: 32vh; object-fit: cover; overflow: hidden; ">
+                                <span class="card-title">{{ post.title }}</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="section">
+                                    <p class="black-text">{{ post.text | formatPreview :30 }}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+                <div class="col s6"  *ngFor="let post of lists['politic'].slice(3, 5)">
+                    <a href="articol/{{post.url}}" class="black-text">
+                        <div class="card post hoverable">
+                            <div class="card-image" style="height: 24vh; object-fit: cover; overflow: hidden; ">
+                                <img src="{{post.cover}}" class="categoric-image">
+                                <span class="card-title">{{ post.title  }}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
-    </a>
+        <div class="col s4">
+            <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['politic'].slice(0, 2)">
+                <div class="card post hoverable">
+                    <div class="card-image">
+                        <img src="{{post.cover}}" style="height: 25vh; object-fit: cover; overflow: hidden; ">
+                    </div>
+                    <div class="card-content">
+                        <p style="font-size: 1.2rem;">{{ post.title }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
-<div class="col s4">
-    <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('social')">
+<div class="col s6">
+    <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('economic')">
         <div class="card-content white-text">
             <p>Economic<i class="material-icons right" style="cursor: pointer">account_balance</i></p>
         </div>
     </div>
-    <a routerLink="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['economic']">
-        <div class="card post hoverable">
-            <div class="card-image valign-wrapper categoric-image-container">
-                <img src="{{post.cover}}" class="categoric-image">
-            </div>
-            <div class="card-stacked">
-                <div class="card-content">
-                    <div class="section">
-                        <p style="font-size: 1.9rem;">{{ post.title  }}</p>
+    <div class="row">
+        <div class="col s4">
+            <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['economic'].slice(0, 2)">
+                <div class="card post hoverable">
+                    <div class="card-image">
+                        <img src="{{post.cover}}" style="height: 25vh; object-fit: cover; overflow: hidden; ">
                     </div>
-                    <div style="position: absolute; bottom: 5%; width: 90%">
-                        <div class="divider"></div>
-                        <div class="section">
-                            <p class="icons_container"><i class="material-icons tiny black-text icon">access_time</i> {{ post.date }} |<i class="material-icons tiny black-text icon">contacts</i> {{post.author}} | <i class="material-icons tiny black-text icon">remove_red_eye</i> {{post.views}}</p>
+                    <div class="card-content">
+                        <p style="font-size: 1.2rem;">{{ post.title }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col s8">
+            <div class="row">
+                <div class="col s12">
+                    <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['economic'].slice(2, 3)">
+                        <div class="card post hoverable" >
+                            <div class="card-image" >
+                                <img src="{{post.cover}}" style="height: 45.5vh; object-fit: cover; overflow: hidden;">
+                                <span class="card-title" style="background-color: rgba(1, 87, 155, 0.5); margin:2%; max-width: 80%; padding: 1 rem;">{{ post.title }}</span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+                <div class="col s6"  *ngFor="let post of lists['economic'].slice(3, 5)">
+                    <a href="articol/{{post.url}}" class="black-text">
+                        <div class="card post hoverable">
+                            <div class="card-image" style="height: 24vh; object-fit: cover; overflow: hidden; ">
+                                <img src="{{post.cover}}" class="categoric-image">
+                                <span class="card-title" style="background-color: rgba(1, 87, 155, 0.5); margin:2%; max-width: 80%; font-size: 1.2rem; padding: 1rem;">{{ post.title }}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
-    </a>
+    </div>
+</div>
+<div class="col s6">
+    <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('cultural')">
+        <div class="card-content white-text">
+            <p>Cultural<i class="material-icons right" style="cursor: pointer">brush</i></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s8">
+            <div class="row">
+                <div class="col s12">
+                    <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['social'].slice(2, 3)">
+                        <div class="card post hoverable" >
+                            <div class="card-image" >
+                                <img src="{{post.cover}}" style="height: 32vh; object-fit: cover; overflow: hidden; ">
+                                <span class="card-title">{{ post.title }}</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="section">
+                                    <p class="black-text">{{ post.text | formatPreview :30 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col s6"  *ngFor="let post of lists['social'].slice(3, 5)">
+                    <a href="articol/{{post.url}}" class="black-text">
+                        <div class="card post hoverable">
+                            <div class="card-image" style="height: 24vh; object-fit: cover; overflow: hidden; ">
+                                <img src="{{post.cover}}" class="categoric-image">
+                                <span class="card-title">{{ post.title  }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col s4">
+            <a href="articol/{{post.url}}" class="black-text" *ngFor="let post of lists['social'].slice(0, 2)">
+                <div class="card post hoverable">
+                    <div class="card-image">
+                        <img src="{{post.cover}}" style="height: 25vh; object-fit: cover; overflow: hidden; ">
+                    </div>
+                    <div class="card-content">
+                        <p style="font-size: 1.2rem;">{{ post.title }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 <div class="col s12">
     <div class="card light-blue darken-2" style="cursor: pointer" (click)="clickTag('video')">

@@ -1,0 +1,102 @@
+<div class="row">
+    <table class="responsive-table striped">
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Numărul</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Administratori</td>
+                <td>{{statistic.Administrators}}</td>
+            </tr>
+            <tr>
+                <td>Utilizatori</td>
+                <td>{{statistic.Users}}</td>
+            </tr>
+            <tr>
+                <td>Articole</td>
+                <td>{{statistic.Posts}}</td>
+            </tr>
+            <tr>
+                <td>Vizualizări</td>
+                <td>{{statistic.Views}}</td>
+            </tr>
+            <tr>
+                <td>Like-uri</td>
+                <td>{{statistic.Likes}}</td>
+            </tr>
+            <tr>
+                <td>Comentarii</td>
+                <td>{{statistic.Comments}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="divider"></div>
+    <table class="responsive-table striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Numărul de vizualizări</th>
+                <th>Like-uri</th>
+                <th>Comentarii</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of statistic.views_by_date | keyvalue: asIsOrder ; let i = index">
+                <td>{{item.key}}</td>
+                <td *ngFor="let i of item.value ">{{i}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="divider"></div>
+    <table class="responsive-table striped">
+        <thead>
+            <tr>
+                <th>Luna</th>
+                <th>Numărul de vizualizări</th>
+                <th>Like-uri</th>
+                <th>Comentarii</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of statistic.views_by_month | keyvalue: asIsOrder ; let i = index">
+                <td>{{ item.key }}</td>
+                <td *ngFor="let i of item.value">{{i}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="divider"></div>
+    <table class="responsive-table striped">
+        <thead>
+            <tr>
+                <th>Anul</th>
+                <th>Numărul de vizualizări</th>
+                <th>Like-uri</th>
+                <th>Comentarii</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of statistic.views_by_year | keyvalue">
+                <td>{{ item.key }}</td>
+                <td *ngFor="let i of item.value">{{i}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="divider"></div>
+    <table class="responsive-table striped">
+        <thead>
+            <tr>
+                <th>Comentarii</th>
+                <th>Numărul de comentarii scrise</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of statistic.comment_by_signed_and_not | keyvalue">
+                <td>{{ item.key }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

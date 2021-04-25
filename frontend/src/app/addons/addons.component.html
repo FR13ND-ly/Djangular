@@ -1,0 +1,121 @@
+<div class="row">
+    <div class="col s3">
+        <h4>Imaginea săptămânii</h4>
+        <div class="card hoverable">
+            <div class="card-image">
+                <i class="material-icons right white-text" style="position: absolute; z-index: 1; top: 5%; right: 5%">add_a_photo</i>
+                <img src="{{addons[0].image}}">
+                
+                <span class="card-title" *ngIf="addons[0].onlyImage" contenteditable style="outline: none;">{{addons[0].title}}</span>
+            </div>
+            <div class="card-content" style="margin-top: -3%" *ngIf="!addons[0].onlyImage">
+                <h5 contenteditable style="outline: none;">{{addons[0].title}}</h5>
+            </div>
+        </div>
+        <div class="center">
+            <label>
+                <input type="checkbox" [(ngModel)]="addons[0].onlyImage" class="filled-in"/>
+                <span>Numai imagine</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[0].active" class="filled-in"/>
+                <span>Activ</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[0].draft" [disabled]="addons[0].active" class="filled-in"/>
+                <span>Ciornă</span>
+            </label>
+        </div>
+    </div>
+    <div class="col s3">
+        <h4>I bloc publicitar</h4>
+        <div class="card horizontal">
+            <div class="card-image">
+                <img src="{{addons[1].image}}">
+            </div>
+            <div class="card-content">
+                <i class="material-icons right black-text">monetization_on</i>
+                <span class="card-title black-text">{{ addons[1].title }}</span>
+                <p class="black-text">{{ addons[1].description }}</p>
+            </div> 
+        </div>
+        <div class="input-field col s12">
+            <input placeholder="Link" type="text">
+        </div>
+        <div class="center">
+            <label>
+                <input type="checkbox" [(ngModel)]="addons[1].onlyImage" class="filled-in"/>
+                <span>Numai imagine</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[1].active" class="filled-in"/>
+                <span>Activ</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[1].draft" [disabled]="addons[1].active" class="filled-in"/>
+                <span>Ciornă</span>
+            </label>
+        </div>
+    </div>
+    <div class="col s3">
+        <h4>II bloc publicitar</h4>
+        <div class="card hoverable">
+            <div class="card-image valign-wrapper">
+                <img src="{{addons[2].image}}" class="image post-image">
+            </div>
+            <div class="card-content">
+                <div class="section">
+                    <i class="material-icons right">monetization_on</i>
+                    <h4 id="second_ad_title">{{addons[2].title}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="input-field col s12">
+            <input placeholder="Link" type="text">
+        </div>
+        <div class="center">
+            <label>
+                <input type="checkbox" [(ngModel)]="addons[2].onlyImage" class="filled-in"/>
+                <span>Numai imagine</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[2].active" class="filled-in"/>
+                <span>Activ</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[2].draft" [disabled]="addons[2].active" class="filled-in"/>
+                <span>Ciornă</span>
+            </label>
+        </div>
+    </div>
+    <div class="col s3">
+        <h4>III bloc publicitar</h4>
+        <div class="card" >
+            <div class="card-image">
+                <img src="{{addons[3].image}}">
+                <span class="card-title">{{addons[3].title}}</span>
+            </div>
+            <div class="card-content">
+                <i class="material-icons right black-text">monetization_on</i>
+                <p class="black-text">{{addons[3].description}}</p>
+            </div>
+        </div>
+        <div class="input-field col s12">
+            <input placeholder="Link" type="text">
+        </div>
+        <div class="center">
+            <label>
+                <input type="checkbox" [(ngModel)]="addons[3].onlyImage" class="filled-in"/>
+                <span>Numai imagine</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[3].active" class="filled-in"/>
+                <span>Activ</span>
+            </label>
+            <label style="margin-left: 5%;">
+                <input type="checkbox" [(ngModel)]="addons[3].draft" [disabled]="addons[3].active" class="filled-in"/>
+                <span>Ciornă</span>
+            </label>
+        </div>
+    </div>
+</div>

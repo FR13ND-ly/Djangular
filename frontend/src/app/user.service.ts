@@ -21,6 +21,10 @@ export class UserService {
     })
   }
 
+  theme(val){
+    this.http.post(this.APIUrl + 'themeAPI/', val)
+  }
+
   getUser(){
     let token = localStorage.getItem('token')
     return this.http.post(this.APIUrl + 'getUser/', {token})

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from 'src/app/hero.service'
-import { UserService } from 'src/app/user.service'  
+import { UserService } from 'src/app/user.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlists',
@@ -9,7 +10,7 @@ import { UserService } from 'src/app/user.service'
 })
 export class PlaylistsComponent implements OnInit {
 
-  constructor(private service: HeroService, private userService: UserService) { }
+  constructor(private service: HeroService, private userService: UserService, private router: Router) { }
 
   Lists: any
   user = {
@@ -23,6 +24,9 @@ export class PlaylistsComponent implements OnInit {
   ngOnInit(): void {
     let promise = new Promise((resolve, reject)=> {
       this.userService.getUser().subscribe(res => {
+        if (!res['is_staff']){
+          this.router.navigate(['/'])
+        }
         this.user = {
           user_id: res["user_id"],
           username: res["username"],

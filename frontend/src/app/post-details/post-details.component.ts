@@ -11,7 +11,6 @@ import { UserService } from 'src/app/user.service'
   styleUrls: ['./post-details.component.css']
 })
 export class PostDetailsComponent implements OnInit {
-
   id: number
   post: any
   commentList: any
@@ -25,7 +24,8 @@ export class PostDetailsComponent implements OnInit {
     username: '',
     is_authenticated: false,
     is_staff: false,
-    token : ""
+    token : "",
+    darktheme : false
   }
   survey: any
   subComment = {
@@ -46,7 +46,7 @@ export class PostDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id']
     });
-    
+   
     let promise = new Promise((resolve, reject)=> {
       this.userService.getUser().subscribe(res => {
         this.user = {
@@ -54,7 +54,8 @@ export class PostDetailsComponent implements OnInit {
           username: res["username"],
           is_authenticated: res["is_authenticated"],
           is_staff: res['is_staff'],
-          token: res['token']
+          token: res['token'],
+          darktheme: res['darktheme']
         }
         resolve(this.user.token)
       })
@@ -77,10 +78,10 @@ export class PostDetailsComponent implements OnInit {
     })
     .then((value) => {
       this.service.addView({url: this.id, token: this.user.token, method : "POST"})
-    })  
+    })
     this.getCommentList()
+    
   }
-
   lists(){
     M.Modal.getInstance(document.getElementById('modal1')).open();
     this.addList = false
@@ -103,9 +104,10 @@ export class PostDetailsComponent implements OnInit {
   }
 
   getSurvey(){
-    if (this.post.survey_active){
+    if (this.post.surveyActive){
       this.service.getSurvey({url : this.id, token: this.user.token}).subscribe(data => {
         this.survey = data
+        console.log(data)
       })
     }
   }
@@ -129,7 +131,7 @@ export class PostDetailsComponent implements OnInit {
 
   clickVariant(pk){
     if (!this.survey.user_voted && this.user.is_authenticated){
-      if (this.post.type_of_vote){
+      if (this.post.typeOfVote){
         this.selectedVariant = pk
         let variants = document.querySelectorAll(".variant")
         variants.forEach(element => {
@@ -229,17 +231,19 @@ export class PostDetailsComponent implements OnInit {
   }
 
   like(){
-    document.getElementById("likeBtn").className = "waves-effect waves-light btn red white-text"
-    setTimeout(()=>{
-      document.getElementById("likeBtn").className = "waves-effect waves-light btn white red-text"
-    }, 350)
-    let val = {
-      url : this.id,
-      token : this.user.token
+    if (this.user.is_authenticated){
+      document.getElementById("likeBtn").className = "waves-effect waves-light btn red white-text"
+      setTimeout(()=>{
+        document.getElementById("likeBtn").className = "waves-effect waves-light btn white red-text"
+      }, 350)
+      let val = {
+        url : this.id,
+        token : this.user.token
+      }
+      this.service.like(val).subscribe(res => {
+        this.likeCount = res['like_count']
+        this.liked = res['liked']
+      })
     }
-    this.service.like(val).subscribe(res => {
-      this.likeCount = res['like_count']
-      this.liked = res['liked']
-    })
   }
 }

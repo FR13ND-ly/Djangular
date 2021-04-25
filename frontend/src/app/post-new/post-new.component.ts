@@ -2,7 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common'; 
 import { HeroService } from 'src/app/hero.service'
 import { Router } from '@angular/router';
-import * as Editor from 'src/assets/js/editor.js'
+import { UserService } from 'src/app/user.service'  
+//import * as Editor from 'src/assets/js/editor.js'
 
 @Component({
   selector: 'app-post-new',
@@ -13,42 +14,29 @@ import * as Editor from 'src/assets/js/editor.js'
 export class PostNewComponent implements OnInit {
 
   pk: any
-  title: any
-  text = ""
 
   post = {
     text : "",
     title : ""
   }
-  code: true
-  editorMode : string
   imgList: any
   uploading =  false
   imageSrc: string
-  customSize = false
-  height: number
-  width: number
-  align = 'left'
-  insertOrCover = true
   imagePk : number
   draft = false
   blockComments = false
   hideLikes = false
-  blockLikes = false
   coverImageSrc = "http://127.0.0.1:8000/api/media/white_default_cover.png"
   imagePage = 1
   noMoreImages = false
   activeSurvey = false
   questionList = []
   typeOfSurvey = true
-  surveysQuestion : string
+  surveysQuestion = ""
 
-  constructor(private service: HeroService, private router: Router, @Inject(DOCUMENT) document) {}
-
-  editor = Editor
+  constructor(private userService: UserService, private service: HeroService, private router: Router, @Inject(DOCUMENT) document) {}
 
   selectedIndex = -1
-  abs = ""
 
   settings = {
     height: 500,
@@ -57,26 +45,22 @@ export class PostNewComponent implements OnInit {
       'searchreplace wordcount visualblocks code fullscreen insertdatetime media nonbreaking',
       'table emoticons template paste help'
     ],
-    toolbar: 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-      'bullist numlist outdent indent | link image  ' +
-      'forecolor backcolor | undo redo ',
+    toolbar: `styleselect | bold italic | alignleft aligncenter alignright alignjustify | 
+      bullist numlist outdent indent | link image  
+      forecolor backcolor | undo redo`,
     menubar: 'favs file edit view insert format tools table',
     images_upload_url: 'http://127.0.0.1:8000/api/fileApi/'
   }
 
   ngOnInit() {
-    this.editorMode = "code"
-    this.editor.init()
+    this.userService.getUser().subscribe(res => {
+      if (!res['is_staff']){
+        this.router.navigate(['/'])
+      }
+    })
   }
 
   savePost(){
-    let variants = []
-    let variantsInput = document.querySelectorAll(".variant")
-    variantsInput.forEach(el =>{
-      if (el.value.trim()){
-        variants.push(el.value)
-      }
-    })
     let val = {
       title : this.post.title,
       text : window.frames[0].document.getElementsByTagName('body')[0].innerHTML,
@@ -84,21 +68,15 @@ export class PostNewComponent implements OnInit {
       draft : this.draft,
       blockComments : this.blockComments,
       hideLikes : this.hideLikes,
-      blockLikes : this.blockLikes,
       tags : M.Chips.getInstance(document.getElementById("etichete")).chipsData,
       surveysQuestion  : this.surveysQuestion,
-      variants : variants,
+      variants : [].concat.apply([], this.questionList),
       typeOfSurvey : this.typeOfSurvey,
       activeSurvey : this.activeSurvey
     }
     this.service.addPost(val).subscribe(res=>{
       this.router.navigate(['/articol/'+ res + '/']);
-    }) 
-  }
-
-  changeView(){
-    this.editorMode = this.editorMode == "code" ? "title" : "code"
-    this.editor.changeView(this.editorMode)
+    })
   }
   
   openImageMenu(){
@@ -108,7 +86,6 @@ export class PostNewComponent implements OnInit {
       this.noMoreImages = res['lastImages']
     })
     M.Modal.getInstance(document.getElementById('modal1')).open();
-    this.insertOrCover = true;
   }
 
   uploadFile(event){
@@ -143,20 +120,6 @@ export class PostNewComponent implements OnInit {
     this.selectedIndex = index
     this.imageSrc = this.imgList[index].url
     this.imagePk = this.imgList[index].pk
-  }
-
-  nextUploadStep(){
-    M.Modal.getInstance(document.getElementById('modal1')).close();
-    M.Modal.getInstance(document.getElementById('modal2')).open();
-  }
-
-  setSize(size){
-    this.customSize = size == 'custom' ? true : false
-  }
-
-  addCoverImage(){
-    this.openImageMenu()
-    this.insertOrCover = false;
   }
 
   setCover(){

@@ -15,6 +15,7 @@ export class SepPostsComponent implements OnInit {
   ngOnInit(): void {
     this.service.sepPosts().subscribe(data => {
       this.lists = data
+      console.log(data)
     })
   }
 

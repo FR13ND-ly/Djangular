@@ -8,6 +8,8 @@ import { PostEditComponent } from './post-edit/post-edit.component';
 import { SideSearchComponent } from './side-search/side-search.component';
 import { PlaylistsComponent } from './playlists/playlists.component';
 import { PlaylistComponent } from './playlist/playlist.component';
+import { StatisticComponent } from './statistic/statistic.component';
+//import { AddonsComponent } from './addons/addons.component';
 
 const routes: Routes = [
   {path: '', component: PostListComponent},
@@ -18,6 +20,9 @@ const routes: Routes = [
   {path: 'tag/:tag', component: SideSearchComponent},
   {path: 'liste', component: PlaylistsComponent},
   {path: 'lista/:url', component: PlaylistComponent},
+  {path: 'pagina/:nr', component: PostListComponent},
+  {path: 'statistic', component: StatisticComponent},
+//  {path: 'addons', component: AddonsComponent}
 ];
 
 @NgModule({

@@ -6,104 +6,16 @@
                 <input id="title" placeholder="Introdu titlul aici" type="text" [(ngModel)]="post.title">
                 <label for="title">Titlu</label>
             </div>
-<!--            <div class="tools">
-                <div class="row">
-                    <div class="col s12 ">
-                        <a class="btn col btn_large" (click)="editor.formatText('bold', false)"><i class="material-icons">format_bold</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('italic', false)"><i class="material-icons">format_italic</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('formatBlock', 'blockquote')"><i class="material-icons">format_quote</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('underline', false)"><i class="material-icons">format_underlined</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('strikethrough', false)"><i class="material-icons">format_strikethrough</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('justifyLeft', false)"><i class="material-icons">format_align_left</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('justifyCenter', false)"><i class="material-icons">format_align_center</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('justifyRight', false)"><i class="material-icons">format_align_right</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('insertOrderedList', false)"><i class="material-icons">format_list_numbered</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('undo', false)"><i class="material-icons">undo</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('redo', false)"><i class="material-icons">redo</i></a>
-                        <a class="btn col btn_large" (click)="editor.formatText('removeFormat', false)"><i class="material-icons">format_clear</i></a>
-                    </div>
-                    </div>
-                    <div class="selectors_container">
-                        <div class="input-field col s2">
-                            <select (change)="editor.formatText('forecolor', $event.target[$event.target.selectedIndex].value);$event.target.selectedIndex=0;">
-                                <option selected hidden disabled>Culoarea Textului</option>
-                                <option value="black">Negru</option>
-                                <option value="white">Alb</option>
-                                <option value="#f44336">Roșu</option>
-                                <option value="#2196f3">Albastru</option>
-                                <option value="#4caf50">Verde</option>
-                                <option value="#ffeb3b">Galben</option>
-                                <option value="#ff9800">Portocaliu</option>
-                                <option value="#e91e63">Roz</option>
-                                <option value="#9c27b0">Violet</option>
-                            </select>
-                        </div>
-                        <div class="input-field col s2">
-                            <select (change)="editor.formatText('fontname',$event.target[$event.target.selectedIndex].value);$event.target.selectedIndex=0;">
-                                <option selected hidden>Font</option>
-                                <option value="Arial">Arial</option>
-                                <option value="Impact">Impact</option>
-                                <option value="Times New Roman">Times New Roman</option>
-                                <option value="Courier New">Courier New</option>
-                                <option value="Verdana">Verdana</option>
-                                <option value="Calibri">Calibri</option>
-                                <option value="Roboto">Roboto</option>
-                            </select>
-                        </div>
-                        <div class="input-field col s3">
-                            <select (change)="editor.formatText('backcolor',$event.target[$event.target.selectedIndex].value);$event.target.selectedIndex=0;">
-                                <option selected hidden>Culoarea Fundalului</option>
-                                <option value="black">Negru</option>
-                                <option value="white">Alb</option>
-                                <option value="#f44336">Roșu</option>
-                                <option value="#2196f3">Albastru</option>
-                                <option value="#4caf50">Verde</option>
-                                <option value="#ffeb3b">Galben</option>
-                                <option value="#ffc107">Portocaliu</option>
-                                <option value="#f06292">Roz</option>
-                                <option value="#ba68c8">Violet</option>
-                            </select>
-                        </div>
-                        <div class="input-field col s2">
-                            <select (change)="editor.formatText('formatblock',$event.target[$event.target.selectedIndex].value);$event.target.selectedIndex=0;">
-                                <option selected hidden>Format</option>
-                                <option value="h1"><h1>Titlu 1</h1></option>
-                                <option value="h2"><h2>Titlu 2</h2></option>
-                                <option value="h3"><h3>Titlu 3</h3></option>
-                                <option value="h4"><h4>Titlu 4</h4></option>
-                                <option value="h5"><h5>Titlu 5</h5></option>
-                                <option value="h6"><h6>Titlu 6</h6></option>
-                                <option value="p"><p>Paragraf</p></option>
-                                <option value="pre"><pre>Preformatat</pre></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-field col s3">
-                        <select (change)="editor.formatText('fontsize',$event.target[$event.target.selectedIndex].value);$event.target.selectedIndex=0;">
-                            <option selected hidden>Mărime Font</option>
-                            <option value="2">Mic</option>
-                            <option value="4">Normal</option>
-                            <option value="6">Mare</option>
-                        </select>
-                    </div>
-                <div class="content">
-                    <a class="btn modal-trigger small" id="modal-trigger1" (click)="openImageMenu()"><i class="material-icons">add_a_photo</i></a>
-                    <a class="btn small" (click)="editor.addVideo()" style="margin-left: 1vw;"><i class="material-icons">video_call</i></a>
-                    <a class="btn right small" (click)="changeView()"><i class="material-icons" id="set_code_or_visual_icon">{{ editorMode }}</i></a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <iframe class="text_input s12 z-depth-1" id="post_text" #postView></iframe>
-                    <textarea class="text_input s12 z-depth-1 hide" id="post_code" #postCode>{{post.text}}</textarea>
-                </div>
-            </div> -->
-            <editor apiKey="27xa7gahmrr6m1d92fealk54sy783vcrmje89euqx92pjoos" [init]="settings" [(ngModel)]="post.text"></editor>
+            <editor 
+                apiKey="27xa7gahmrr6m1d92fealk54sy783vcrmje89euqx92pjoos" 
+                [init]="settings" 
+                [(ngModel)]="post.text">
+            </editor>
             <div class="row">
                 <h5>Imagine de copertă</h5>
                 <div class="col s12">
                     <input id="cover_name" name="cover_name" value="" class="hide">
-                    <img class="card" style="width: 100%;" (click)="addCoverImage()" src="{{ coverImageSrc }}" id="representative_cover" required/>
+                    <img class="card" style="width: 100%;" (click)="openImageMenu()" src="{{ coverImageSrc }}" id="representative_cover" required/>
                 </div>
             </div>
         </div>
@@ -123,19 +35,18 @@
                     Univot
                     </label>
                 </div>
-                <code>{{questionList}}</code>
                 <div class="input-field">
                     <input id="surveyQ" type="text" [(ngModel)]="surveysQuestion">
                     <label for="surveyQ">Întrebarea chestionarului</label>
                 </div>
-                <div class="input-field" *ngFor="let question of questionList; let i = index">
-                    <input type="text" class="variant" placeholder="Variantă" style="width: 98%;">
+                <div class="input-field" *ngFor="let question of questionList;">
+                    <input type="text" class="variant" placeholder="Variantă" [(ngModel)]="question[0]" style="width: 98%;">
                     <i class="material-icons prefix teal-text" style="margin-top: 1.5vh; cursor: pointer;" (click)="this.questionList.splice(i, 1);">delete</i>
                 </div>
             </div>
         </div>
         <div class="card-action" *ngIf="activeSurvey">
-            <button class="btn" (click)="questionList.push('')">Adaugă o variantă de vot</button>
+            <button class="btn" (click)="questionList.push([])">Adaugă o variantă de vot</button>
         </div>
     </div>
 </div>
@@ -204,62 +115,6 @@
         </div>
     </div>
     <div class="modal-footer cyan" style="background-color: transparent !important;" >
-        <a *ngIf="insertOrCover" class="btn waves-effect waves-green white-text" (click)="nextUploadStep()" style="width: 100%; height: 5vh;" [attr.disabled]="selectedIndex < 0 ? true : null" >Continuă</a>
-        <a *ngIf="!insertOrCover" class="btn waves-effect waves-green white-text" (click)="setCover()" style="width: 100%; height: 5vh;" [attr.disabled]="selectedIndex < 0 ? true : null" >Continuă</a>
+        <a class="btn waves-effect waves-green white-text" (click)="setCover()" style="width: 100%; height: 5vh;" [attr.disabled]="selectedIndex < 0 ? true : null" >Continuă</a>
     </div>
 </div>
-<div id="modal2" class="modal modal-fixed-footer z-depth-0" style="background-color: transparent!important;">
-    <div class="row">
-        <div class="col s4">
-            <div class="card">
-                <div class="card-content" style="overflow-y: visible; height: 57.5vh;">
-                    <h4 class="center">Ajustează</h4>
-                    <div class="input-field col s12">
-                        <input #imgLegend id="legend" type="text" placeholder="Legenda">
-                    </div>
-                    <h5>Aliniere</h5>
-                    <div class="row">
-                        <label>
-                            <input [(ngModel)]="align" name="imageAlign" value="left" class="with-gap" type="radio" checked selected />
-                            <span><i class="material-icons">format_align_left</i></span>
-                        </label>
-                        <label>
-                            <input [(ngModel)]="align" name="imageAlign" class="with-gap" value="center" type="radio"/>
-                            <span style="margin-left: 1vw;"><i class="material-icons">format_align_center</i></span>
-                        </label>
-                        <label>
-                            <input [(ngModel)]="align" name="imageAlign" class="with-gap" value="right" type="radio"/>
-                            <span style="margin-left: 1vw;"><i class="material-icons">format_align_right</i></span>
-                        </label>
-                    </div>
-                    <h5>Mărime</h5>
-                    <select #imgSize id="imgSize" (change)="setSize(imgSize.value)">
-                        <option value="30">Mic</option>
-                        <option value="60" selected>Mediu</option>
-                        <option value="100">Întreg ecranul</option>
-                        <option value="custom" >Personalizat</option>
-                    </select>
-                    <div class="row" *ngIf="customSize">
-                        <div class="input-field col s6">
-                            <input #imgHeight type="text" [(ngModel)]="height" id="height">
-                            <label for="height">Înălțime</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input #imgWidth type="text" [(ngModel)]="width" id="width">
-                            <label for="width">Lățime</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col s8">
-            <div class="card">
-                <div class="card-content center">
-                    <img src="{{imageSrc}}" id="representative-img" style="height: 50vh;" class="responsive-image">
-                </div>
-            </div>
-        </div>
-    </div>
-    <a class="btn waves-effect waves-green white-text" id="insertImage" name="insert" style="width: 100%;">Inserează imaginea</a>
-</div>
-         

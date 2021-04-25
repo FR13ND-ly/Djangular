@@ -13,9 +13,12 @@ from rest_framework.parsers import FileUploadParser
 from django.contrib.auth.hashers import make_password
 import os
 from django.contrib.auth.models import User
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+
 
 from .serializer import PostSerializer
-from .models import Post, Image, Comment, Survey, Vote, Profile, List, ListItem, SubComment
+from .models import Post, Image, Comment, Survey, Vote, Profile, List, ListItem, SubComment, Addon
 
 import locale
 locale.setlocale(locale.LC_ALL, 'ro')
@@ -45,7 +48,8 @@ def getUser(request):
             'username' : "Autentifică-te",
             'is_authenticated' : False,
             'is_staff' : False,
-            'token' : token
+            'token' : token,
+            "darktheme" : False
         }
     else:
         user = Token.objects.get(key=token).user
@@ -54,7 +58,8 @@ def getUser(request):
            'username' : user.username,
            'is_authenticated' : user.is_authenticated,
            'is_staff' : user.is_staff,
-           'token' : token
+           'token' : token,
+           "darktheme" : False
         }
     return JsonResponse(response, safe=False)
 
@@ -82,13 +87,13 @@ def register(request):
         )
         newList.save()
     response = {
-            'token' : token.key,
-            'user_id' : user.pk,
-            'username' : user.username,
-            'email' : user.email,
-            'is_authenticated' : user.is_authenticated,
-            'is_staff' : user.is_staff
-        }
+        'token' : token.key,
+        'user_id' : user.pk,
+        'username' : user.username,
+        'email' : user.email,
+        'is_authenticated' : user.is_authenticated,
+        'is_staff' : user.is_staff
+    }
     return JsonResponse(response, safe=False)
 
 @csrf_exempt
@@ -110,7 +115,8 @@ def postsAPI(request):
     if relative_number_of_pages > 1:
         if lk < 4:
             for i in range(1, lk + 3 + (5 - lk)):
-                number_of_pages.append(i)
+                if i <= relative_number_of_pages:
+                    number_of_pages.append(i)
         if lk > 3:
             for i in range(lk - 3, lk + 4):
                 if i <= relative_number_of_pages:
@@ -177,16 +183,18 @@ def topArticles(requests):
     return JsonResponse(response, safe=False)
 
 def sepPosts(request):
-    economic, politic, social, video = [], [], [], []
+    economic, politic, social, cultural, video = [], [], [], [], []
     for post in Post.objects.select_related('author', 'cover').order_by('-date'):
-        if 'economic' in post.tags.lower() and len(economic) < 2:
+        if 'economic' in post.tags.lower() and len(economic) < 5:
             economic.append(post) 
-        elif 'politic' in post.tags.lower() and len(politic) < 2:
+        elif 'politic' in post.tags.lower() and len(politic) < 5:
             politic.append(post) 
-        elif 'social' in post.tags.lower() and len(social) < 2: 
+        elif 'social' in post.tags.lower() and len(social) < 5: 
             social.append(post)
+        elif 'cultural' in post.tags.lower() and len(social) < 5: 
+            cultural.append(post)
         elif 'video' in post.tags.lower() and len(video) < 3: 
-            video.append(post)    
+            video.append(post)
     def toResponse(listR):
         posts = []
         for post in listR:
@@ -206,6 +214,7 @@ def sepPosts(request):
         'economic' : toResponse(economic),
         'social' : toResponse(social),
         'politic' : toResponse(politic),
+        'cultural' : toResponse(cultural),
         'video' : toResponse(video)
     }  
     return JsonResponse(response, safe=False)
@@ -279,8 +288,8 @@ def listAPI(request):
                     })
                 response = {
                     "lists" : lists,
-                    "views" : len(ListItem.objects.filter(List = List.objects.get(user=user, name="Istoric"))),
-                    "likes" : len(ListItem.objects.filter(List = List.objects.get(user=user, name="Aprecieri")))
+                    "views" : len(ListItem.objects.filter(List = List.objects.get_or_create(user=user, name="Istoric", removable=False, hidden=True)[0])),
+                    "likes" : len(ListItem.objects.filter(List = List.objects.get_or_create(user=user, name="Aprecieri", removable=False, hidden= True)[0]))
                 }
             return JsonResponse(response, safe=False)
         elif data['method'] == "POST":
@@ -299,7 +308,7 @@ def listAPI(request):
                 return JsonResponse(response, safe=False)
             lk = data['lk']
             posts = []
-            for item in ListItem.objects.filter(List = tList).order_by(data['direction'] + "date")[lk * 10 : (lk + 1) * 10]:
+            for item in ListItem.objects.filter(List = tList).order_by(data['direction'] + "date")[lk * 20 : (lk + 1) * 20]:
                 posts.append({
                     "author": item.post.author.username,
                     "pk": item.post.pk,
@@ -315,7 +324,6 @@ def listAPI(request):
                 })
             response = {
                 "posts" : posts,
-                "lastModify" : formatDate(ListItem.objects.filter(List = tList).order_by("-date")[0].date),
                 "name" : tList.name,
                 "access" : tList.noAccessOtherUsers,
                 "hidden" : tList.hidden,
@@ -324,7 +332,7 @@ def listAPI(request):
                 "author" : tList.user.username,
                 "status" : "success",
                 "own" : user == tList.user,
-                "last" : (len(ListItem.objects.filter(List = tList)) - 10 * ( lk - 1 )) < 10,
+                "last" : (len(ListItem.objects.filter(List = tList)) - 20 * ( lk - 1 )) < 20,
                 "length" : len(ListItem.objects.filter(List = tList))
             }
         if data['method'] == "DELETE":
@@ -368,8 +376,10 @@ def postAPI(request, url=0):
     if request.method == "GET":
         post = Post.objects.get(url = url)
         variants = {}
+        questionList = []
         for i in Survey.objects.filter(post = post):
             variants.update({i.variant  : len(Vote.objects.filter(variant = i))})
+            questionList.append([i.variant])
         response = {
             "title" : post.title,
             "pk" : post.pk,
@@ -378,12 +388,16 @@ def postAPI(request, url=0):
             "draft" : post.draft,
             "date" : formatDate(post.date),
             "views" : len(ListItem.objects.filter(post = post, historic=True)),
-            "block_comments" : post.block_comments,
-            "hide_likes" : post.hide_likes,
-            "tags" : post.tags.split(" ") if post.tags.split(" ")[0] != "" else [],
-            "surveys_question" : post.surveys_question,
-            "survey_active" : post.active_survey,
-            "type_of_vote" : post.type_of_vote
+            "blockComments" : post.block_comments,
+            "hideLikes" : post.hide_likes,
+            "questionList" : questionList,
+            "tags" : post.tags.strip().split(" "),
+            "surveysQuestion" : post.surveys_question,
+            "surveyActive" : post.active_survey,
+            "typeOfVote" : post.type_of_vote,
+            "imagePk" :  post.cover.pk,
+            "cover" : "http://127.0.0.1:8000/api" + post.cover.file.url,
+            "variants" : variants
         }
         return JsonResponse(response, safe=False)
     if request.method == "POST":
@@ -411,15 +425,39 @@ def postAPI(request, url=0):
             for i in post_data['variants']:
                 newSurvey = Survey.objects.create(post = post, variant = i)
                 newSurvey.save()
+        tags = ""
+        for i in post_data['tags']:
+            tags += " " + i['tag']
+        post.tags = tags
         post.save()
-        return JsonResponse(str(post.pk), safe=False)
+        return JsonResponse(str(post.url), safe=False)
     if request.method == "PUT":
         data = JSONParser().parse(request)
         post = Post.objects.get(url = data['url'])
         post.title = data['title']
         post.text = data['text']
+        post.url = data['title'].replace(' ', '-')
+        post.draft = data['draft']
+        post.cover = Image.objects.get(pk = data['imgPk'])
+        post.block_comments = data['blockComments']
+        post.hide_likes = data['hideLikes']
+        post.type_of_vote = data['typeOfVote']
+        post.active_survey = data['activeSurvey']
+        for i in Survey.objects.filter(post = post):
+            i.delete()
+        if post.active_survey:
+            for i in data['variants']:
+                newSurvey = Survey.objects.create(post = post, variant = i)
+                newSurvey.save()
+        tags = ''
+        for i in data['tags']:
+            tags += " " + i['tag']
+        post.tags = tags
         post.save()
-        return JsonResponse('Yep', safe=False)
+        response = {
+            "url" : post.url 
+        }
+        return JsonResponse(response, safe=False)
     if request.method == "DELETE":
         Post.objects.get(url = url).delete()
         return JsonResponse("Success", safe=False)
@@ -542,11 +580,18 @@ def likeApi(request):
     like_data = JSONParser().parse(request)
     post = Post.objects.get(url = like_data['url'])
     user = Token.objects.get(key = like_data['token']).user if len(Token.objects.filter(key = like_data['token'])) != 0 else None
+    response = {}
     if request.method == "POST":
-        response = {
-            "like_count" : len(ListItem.objects.filter(post = post, like=True)),
-            "liked" : "favorite_outline" if len(ListItem.objects.filter(List = List.objects.get(user = user, name = "Aprecieri"), post = post, like = True)) == 0 else "favorite"
-        }
+        if user == None:
+            response = {
+                "like_count" : len(ListItem.objects.filter(post = post, like=True)),
+                "liked" : "favorite_outline"
+            }
+        else:
+            response = {
+                "like_count" : len(ListItem.objects.filter(post = post, like=True)),
+                "liked" : "favorite_outline" if len(ListItem.objects.filter(List = List.objects.get(user = user, name = "Aprecieri"), post = post, like = True)) == 0 else "favorite"
+            }
         return JsonResponse(response, safe=False)
     if request.method == "PUT":
         like, created = ListItem.objects.get_or_create(List = List.objects.get(user = user, name = "Aprecieri"), post = post, like = True)
@@ -619,4 +664,103 @@ def search(request):
     response =  {
         "result" : result
     }
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
+def statistic(request):
+    Administrators = User.objects.filter(is_staff = True).count()
+    Users = User.objects.filter(is_staff = False).count()
+    Posts = Post.objects.all().count()
+    Views = ListItem.objects.filter(historic = True).count()
+    Likes = ListItem.objects.filter(like = True).count()
+    Comments = Comment.objects.all().count()
+    views_by_date = {}
+    views_by_month = {}
+    views_by_year = {}
+#    views_by_signed_and_not = {"Autentificat" : int(), "Oaspete" : int()}
+  #  white_or_dark_theme_stat = {"Luminoasă" : int(),"Întunecată" : int()}
+    comment_by_signed_and_not = {"De autentificați" : int(), "De oaspeți" : int()}
+    for i in range(int(timezone.now().strftime("%d")), 0, - 1):
+        views_by_date.update({
+            i : [
+                ListItem.objects.filter(historic = True).filter(date__date=timezone.now() - timedelta(days = int(timezone.now().strftime("%d")) - i)).reverse().count(), 
+                ListItem.objects.filter(like = True).filter(date__date=timezone.now() - timedelta(days = int(timezone.now().strftime("%d")) - i)).reverse().count(), 
+                Comment.objects.filter(date__date=timezone.now() - timedelta(days = int(timezone.now().strftime("%d")) - i)).reverse().count()
+            ]
+        })
+    for i in range(int(timezone.now().strftime("%m")), -1, -1):
+        views_by_month.update({
+            (timezone.now() - relativedelta(months = int(timezone.now().strftime("%m"))-i)).strftime("%B").capitalize() : [
+                ListItem.objects.filter(historic = True).filter(date__date=timezone.now() - relativedelta(months = int(timezone.now().strftime("%m")) - i)).reverse().count(), 
+                ListItem.objects.filter(like = True).filter(date__date=timezone.now() - relativedelta(months = int(timezone.now().strftime("%m")) - i)).reverse().count(), 
+                Comment.objects.filter(date__date=timezone.now() - relativedelta(months = int(timezone.now().strftime("%m")) - i)).reverse().count()
+            ] 
+        })
+    for i in range(int(timezone.now().strftime("%Y")), int(timezone.now().strftime("%Y"))-4, -1):
+        views_by_year.update({
+            i : [
+                ListItem.objects.filter(historic = True).filter(date__date=timezone.now() - relativedelta(years = int(timezone.now().strftime("%Y")) - i)).reverse().count(), 
+                ListItem.objects.filter(like = True).filter(date__date=timezone.now() - relativedelta(years = int(timezone.now().strftime("%Y")) - i)).reverse().count(), 
+                Comment.objects.filter(date__date=timezone.now() - relativedelta(years = int(timezone.now().strftime("%Y")) - i)).reverse().count()
+            ] 
+        })
+ #   for i in ListItem.objects.filter(historic = True):
+ #       if i.user != None:
+ #           views_by_signed_and_not["Autentificat"] += 1
+ #       else:
+ #           views_by_signed_and_not["Oaspete"] += 1
+ #   for i in Profile.objects.all():
+ #       if i.darktheme:
+ #           white_or_dark_theme_stat["Întunecată"] += 1
+ #       else:
+ #           white_or_dark_theme_stat["Luminoasă"] += 1
+    for i in Comment.objects.all():
+        if  i.by_authenticated:
+            comment_by_signed_and_not["De autentificați"] += 1
+        else:
+            comment_by_signed_and_not["De oaspeți"] += 1
+    response = {
+        "Administrators" : Administrators, 
+        "Users" : Users, 
+        "Posts" : Posts, 
+        "Views" : Views, 
+        "Likes" : Likes, 
+        "Comments" : Comments, 
+        "views_by_date" : views_by_date, 
+        "views_by_month" : views_by_month, 
+        "views_by_year" : views_by_year, 
+     #   'views_by_signed_and_not' : views_by_signed_and_not , 
+     #   "white_or_dark_theme_stat" : white_or_dark_theme_stat, 
+        "comment_by_signed_and_not" : comment_by_signed_and_not}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
+def addonsAPI(request):
+    response = {}
+    data = JSONParser().parse(request)
+    if data['method'] == "GET":
+        response = []
+        for pk in range(1, 5):
+            addon = Addon.objects.get_or_create(pk = pk)[0]
+            response.append({
+                "pk" : addon.pk,
+                "link" : addon.link,
+                "title" : addon.title,
+                "description" : addon.description,
+                "image" : "http://127.0.0.1:8000/api" + addon.image.file.url if addon.image != None else "http://127.0.0.1:8000/api/media/wallhaven-5wmgo9_026kwyS.jpg",
+                "imagePk" : addon.image.pk if addon.image != None else -1,
+                "onlyImage" : addon.onlyImage,
+                "active" : addon.active,
+                "draft" : addon.draft
+            })
+    if data['method'] == "PUT":
+        addon = Addon.objects.get_or_create(pk = data['pk'])[0]
+        addon.link = data['link']
+        addon.title = data['title']
+        addon.description = data['description']
+        addon.image = data['imagePk']
+        addon.onlyImage = data['onlyImage']
+        addon.active = data['active']
+        addon.draft = data['draft']
+        addon.save()
     return JsonResponse(response, safe=False)

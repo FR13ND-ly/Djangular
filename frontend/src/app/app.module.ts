@@ -23,6 +23,8 @@ import { SepPostsComponent } from './sep-posts/sep-posts.component';
 import { PlaylistsComponent } from './playlists/playlists.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { StatisticComponent } from './statistic/statistic.component';
+import { AddonsComponent } from './addons/addons.component';
 
 @NgModule({
   declarations: [
@@ -38,12 +40,14 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     SepPostsComponent,
     PlaylistsComponent,
     PlaylistComponent,
+    StatisticComponent,
+    AddonsComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
     MatMenuModule,
     BrowserAnimationsModule,
     EditorModule

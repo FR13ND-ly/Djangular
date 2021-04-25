@@ -86,3 +86,12 @@ class Survey(models.Model):
 class Vote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     variant = models.ForeignKey('blog.Survey', on_delete=models.CASCADE, related_name='vote')
+
+class Addon(models.Model):
+    link = models.CharField(max_length=200, null=True)
+    title = models.CharField(max_length=200, default="Text" ,null=True)
+    description = models.CharField(max_length=200, default="Text", null=True)
+    image = models.ForeignKey('blog.Image', on_delete=models.CASCADE, related_name='addon', null=True)
+    onlyImage = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    draft = models.BooleanField(default=False)

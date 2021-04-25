@@ -30,6 +30,9 @@ export class PlaylistComponent implements OnInit {
     });
     let promise = new Promise((resolve, reject)=> {
       this.userService.getUser().subscribe(res => {
+        if (!res['is_staff']){
+          this.router.navigate(['/'])
+        }
         this.user = {
           user_id: res["user_id"],
           username: res["username"],
@@ -71,6 +74,7 @@ export class PlaylistComponent implements OnInit {
       this.last = data['last']
       this.added++
     })
+    
   }
 
   copyUrl(){
